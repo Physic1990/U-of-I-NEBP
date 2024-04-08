@@ -35,8 +35,8 @@ def InterpolateReIndex(DataInput,IndexOld,IndexNew,InterpStep,DoPrintOutput):
     InterpReference = DataInput[str(IndexNew)]
     
     #Get Min/max of new index
-    NewIndexMin = InterpReference.min()
-    NewIndexMax = InterpReference.max()
+    NewIndexMin = int(InterpReference.min())
+    NewIndexMax = int(InterpReference.max())
     
     #setup for data
     dataInterpolated = pd.DataFrame() #new Frame for interpolated data
@@ -52,7 +52,7 @@ def InterpolateReIndex(DataInput,IndexOld,IndexNew,InterpStep,DoPrintOutput):
     out.txt('New Index Max is {max}'.format(max = NewIndexMax),DoPrintOutput)
     
     #create an index for all values to interpolate on
-    InterpolatedIndex = [*range(NewIndexMin,NewIndexMax+1,InterpStep)]
+    InterpolatedIndex = [*range(NewIndexMin,NewIndexMax+1,int(InterpStep))]
     
     #negative numbers represent less values in the new index, Debug Info
     out.txt('Old Index Length is {length}'.format(length = len(DataInput[str(IndexOld)])),DoPrintOutput)

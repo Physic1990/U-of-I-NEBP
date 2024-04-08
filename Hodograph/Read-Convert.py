@@ -40,7 +40,9 @@ for path, subdirs,files, in os.walk(dataSource):
 
 #Save File
 if saveData:
-
-    data.to_csv((savePath + "out.csv"))      
+    save_folder = r"C:\\Users\\nirau\\OneDrive\\Desktop\\U-of-I-NEBP\\Hodograph\\data"
+    save_path = os.path.join(save_folder, "rawDataout.csv")
+    data.to_csv(save_path)      
     print("Data Saved")
+
 

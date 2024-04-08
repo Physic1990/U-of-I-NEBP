@@ -1,18 +1,60 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jul 11 14:06:11 2023
+Created on Tue Jun 20 15:51:26 2023
 
 @author: lkear
 """
-
-#Dependencies
-import pandas as pd
 import os
+import pandas as pd
+import readGrawProfile_alg as rgp
+
+print("######### Read From File and Convert Data ####################\n")
+                 
+dataSource = rgp.getUserInputFile("Select path to data input directory: ")
+saveData   = rgp.getUserInputTF("Do you want to save output data?")
+
+if saveData:
+    savePrompt = rgp.getUserInputTF("Save to same directory?")
+    if savePrompt: 
+        savePath = dataSource
+    elif saveData:
+        savePath = rgp.getUserInputFile("Enter path to data output directory:")
+    else:
+        savePath = "NA"
+else:
+    savePath = "NA"
+    
+for path, subdirs,files, in os.walk(dataSource):
+    for file in os.listdir(path):
+        try:
+            profile = rgp.readProfile(dataSource,subdirs,path,file)
+            if profile is not None:
+                data = profile[0]
+                saveName = profile[2]
+                datetime = profile[3]
+                
+                ##################################         
+        except:
+            print("Error Running " +saveName)
+            pass
+
+#Save File
+if saveData:
+    save_folder = r"C:\\Users\\nirau\\OneDrive\\Desktop\\U-of-I-NEBP\\Hodograph\\data"
+    save_path = os.path.join(save_folder, "rawDataout.csv")
+    data.to_csv(save_path)      
+    print("Data Saved")
+
+
+print("################## Conversion to csv done ###################\n")
+
+print("Calculating.......")
+
 
 # Detects and sets source and data directories, changes to source to import rest of program
 ProgramDirectoryMain = os.getcwd()
-SourceDirectory = str(ProgramDirectoryMain+'\src')
-DataDirectory = str(ProgramDirectoryMain+'\data')
+SourceDirectory = os.path.join(ProgramDirectoryMain, 'C:\\Users\\nirau\\OneDrive\\Desktop\\U-of-I-NEBP\\Hodograph\\src')
+DataDirectory = os.path.join(ProgramDirectoryMain, 'C:\\Users\\nirau\\OneDrive\\Desktop\\U-of-I-NEBP\\Hodograph\\data')
 os.chdir(SourceDirectory)
 
 #Custom Dependencies in source file
@@ -71,10 +113,6 @@ data = runFilterProgram(data)
 
 #Save filtered data
 data.to_csv((OutputFileName))   
-
-
-
-
 
 #Plotting U,V to check filtering
 #PH.macroHodo(data['Alt'], data['Ufiltered'], data['Vfiltered'])
